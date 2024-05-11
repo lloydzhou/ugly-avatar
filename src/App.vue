@@ -1,12 +1,14 @@
 <template>
   <FaceGenerator />
+  <Buttons />
 </template>
 
 <script>
 import FaceGenerator from './views/FaceGenerator.vue'
+import Buttons from './components/Buttons.vue'
 
 export default {
-  components: { FaceGenerator },
+  components: { FaceGenerator, Buttons },
   name: 'App',
 }
 </script>
