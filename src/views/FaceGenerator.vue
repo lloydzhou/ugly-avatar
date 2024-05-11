@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <div style="position: relative">
     <svg
       viewBox="-100 -100 200 200"
       xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +54,7 @@
         </linearGradient>
       </defs>
       <title>That's an ugly face</title>
-      <desc>CREATED BY XUAN TANG, MORE INFO AT TXSTC55.GITHUB.IO</desc>
+      <desc></desc>
       <rect
         x="-100"
         y="-100"
@@ -265,8 +266,10 @@
         />
       </g>
     </svg>
+    <img id="face-img" />
     <button @click="generateFace">ANOTHER</button>
     <button @click="downloadSVGAsPNG">DOWNLOAD</button>
+    </div>
   </div>
 </template>
 
@@ -515,6 +518,22 @@ export default {
           this.faceWidth
         );
       }
+      setTimeout(() => {
+        const svg = document.getElementById("face-svg");
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const img = document.createElement("img");
+        const svgSize = svg.getBoundingClientRect();
+        canvas.width = svgSize.width;
+        canvas.height = svgSize.height;
+        img.setAttribute("src", "data:image/svg+xml;base64," + btoa(svgData));
+        img.onload = function () {
+          ctx.drawImage(img, 0, 0);
+          const faceimg = document.getElementById("face-img");
+          faceimg.setAttribute("src", canvas.toDataURL("image/png"));
+        };
+      }, 60)
     },
     downloadSVGAsPNG() {
       // download our svg as png
@@ -558,6 +577,10 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  padding: 5px;
+}
+.container>div {
   display: inline-flex;
   /* align-items items in column */
   flex-direction: column;
@@ -565,11 +588,18 @@ export default {
   align-items: center;
   /* center items vertically */
   justify-content: center;
-  background-color: #ffffff;
-  padding: 5px;
 }
 svg {
   background-color: #ffffff;
+}
+#face-img {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  top: 0;
+  left:0;
+  opacity: 0;
+  z-index: 1;
 }
 button {
   margin-top: 10px;
